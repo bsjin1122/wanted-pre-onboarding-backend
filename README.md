@@ -30,3 +30,25 @@
 
 ## ERD
 ![img.png](img.png)
+
+### API 명세
+| 기능         | api path                  | Http Method |
+|------------|---------------------------|-------------|
+| 1. 채용공고 등록 | /api/job-posting/register | POST   |
+
+
+
+1. 채용공고 등록(/api/job-posting/register, POST)
+```json
+// 요청
+{
+  "companyId": 1,
+  "positionTitle":"백엔드 주니어 개발자",
+  "hiringBonus":1000000,
+  "jobDescription":"원티드랩에서 백엔드 주니어 개발자를 채용합니다. 자격요건은..",
+  "skillsRequired":"Python"
+}
+
+// 응답
+"채용 공고 등록이 완료되었습니다."
+```
