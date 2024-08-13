@@ -2,6 +2,7 @@ package com.wanted.job.user.model.entity;
 
 import java.util.List;
 
+import com.wanted.job.JobApplication;
 import com.wanted.job.application.model.entity.Application;
 import com.wanted.job.common.entity.BaseTimeEntity;
 
@@ -13,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -36,6 +38,7 @@ public class User extends BaseTimeEntity {
 	@Column(nullable = false, length = 100)
 	private String email;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Application> applications;
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Application jobApplication;
+
 }

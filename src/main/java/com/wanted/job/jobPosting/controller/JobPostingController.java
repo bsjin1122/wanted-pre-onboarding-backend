@@ -1,6 +1,7 @@
 package com.wanted.job.jobPosting.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wanted.job.jobPosting.exception.JobPostingErrorCode;
+import com.wanted.job.jobPosting.exception.JobPostingException;
 import com.wanted.job.jobPosting.model.dto.JobPostingRequestDTO;
 import com.wanted.job.jobPosting.model.dto.JobPostingResponseDTO;
 import com.wanted.job.jobPosting.model.dto.JobPostingsPagingDTO;
@@ -66,6 +69,11 @@ public class JobPostingController {
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size
 	){
+		// 검색어 길이 유효성 검사 (예: 최대 50자)
+		if (keyword.length() > 50) {
+			throw new JobPostingException(JobPostingErrorCode.JOB_POSTING_EXCEED_KEYWORD);
+		}
+
 		PagedResponseDTO<JobPostingsPagingDTO> response = jobPostingService.searchJobPostings(keyword, page, size);
 		return ResponseEntity.ok(response);
 	}

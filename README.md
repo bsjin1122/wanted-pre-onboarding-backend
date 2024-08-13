@@ -159,3 +159,13 @@
   "last": true
 }
 ```
+
+7. 사용자 채용공고 지원
+```json
+// 요청
+{
+    "jobPostingId": 1,
+    "userId": 1,
+    "resume": "https://github.com/bsjin1122/wanted-pre-onboarding-backend"
+}
+```

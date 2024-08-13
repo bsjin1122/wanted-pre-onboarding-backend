@@ -17,4 +17,5 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
 		"jp.company.name LIKE %:keyword%")
 	Page<JobPosting> findByKeywordInAllFields(@Param("keyword") String keyword, Pageable pageable);
 
+
 }
