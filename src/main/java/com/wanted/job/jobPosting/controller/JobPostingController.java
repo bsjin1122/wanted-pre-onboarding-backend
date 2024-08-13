@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wanted.job.jobPosting.model.dto.JobPostingRequestDTO;
 import com.wanted.job.jobPosting.model.dto.JobPostingResponseDTO;
+import com.wanted.job.jobPosting.model.dto.JobPostingsPagingDTO;
+import com.wanted.job.jobPosting.model.dto.PagedResponseDTO;
 import com.wanted.job.jobPosting.service.JobPostingService;
 
 import lombok.AllArgsConstructor;
@@ -45,6 +48,15 @@ public class JobPostingController {
 	@GetMapping("/detail/{jobPostingId}")
 	public ResponseEntity<JobPostingResponseDTO> getJobPostingDetailById(@PathVariable(value="jobPostingId") Long jobPostingId){
 		return ResponseEntity.ok(jobPostingService.detailJobPosting(jobPostingId));
+	}
+
+	@GetMapping("/")
+	public ResponseEntity<PagedResponseDTO<JobPostingsPagingDTO>> getAllJobPostings(
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size
+	){
+		PagedResponseDTO<JobPostingsPagingDTO> response = jobPostingService.getAllJobPostings(page, size);
+		return ResponseEntity.ok(response);
 	}
 
 }

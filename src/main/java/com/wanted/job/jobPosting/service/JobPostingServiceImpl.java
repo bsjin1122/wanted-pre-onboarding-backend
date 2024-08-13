@@ -3,6 +3,9 @@ package com.wanted.job.jobPosting.service;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.wanted.job.company.exception.CompanyErrorCode;
@@ -13,6 +16,8 @@ import com.wanted.job.jobPosting.exception.JobPostingErrorCode;
 import com.wanted.job.jobPosting.exception.JobPostingException;
 import com.wanted.job.jobPosting.model.dto.JobPostingRequestDTO;
 import com.wanted.job.jobPosting.model.dto.JobPostingResponseDTO;
+import com.wanted.job.jobPosting.model.dto.JobPostingsPagingDTO;
+import com.wanted.job.jobPosting.model.dto.PagedResponseDTO;
 import com.wanted.job.jobPosting.model.entity.JobPosting;
 import com.wanted.job.jobPosting.repository.JobPostingRepository;
 
@@ -94,5 +99,23 @@ public class JobPostingServiceImpl implements JobPostingService {
 			.build();
 
 		return responseDTO;
+	}
+
+	@Override
+	public PagedResponseDTO<JobPostingsPagingDTO> getAllJobPostings(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Page<JobPosting> jobPostings = jobPostingRepository.findAll(pageable);
+
+		Page<JobPostingsPagingDTO> response = jobPostings.map(jobPosting ->
+			JobPostingsPagingDTO.builder()
+				.jobPostId(jobPosting.getId())
+				.companyId(jobPosting.getCompany().getId())
+				.country(jobPosting.getCompany().getCountry())
+				.region(jobPosting.getCompany().getRegion())
+				.positionTitle(jobPosting.getPositionTitle())
+				.hiringBonus(jobPosting.getHiringBonus())
+				.skillsRequired(jobPosting.getSkillsRequired())
+				.build());
+		return new PagedResponseDTO<>(response);
 	}
 }

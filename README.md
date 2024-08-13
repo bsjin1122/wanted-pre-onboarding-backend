@@ -32,14 +32,16 @@
 ![img.png](img.png)
 
 ### API 명세
-| 기능           | api path                               | Http Method |
-|--------------|----------------------------------------|-------------|
-| 1. 채용공고 등록   | /api/job-posting/register              | POST        |
-| 2. 채용공고 수정   | /api/job-posting/update/{jobPostingId} | PUT         |
-| 3. 채용공고 삭제   | /api/job-posting/delete/{jobPostingId} | DELTE       
-| 4. 채용공고 상세조회 | /api/job-posting/detail/{jobPostingId} | GET         |
+| 기능            | api path                               | Http Method |
+|---------------|----------------------------------------|-------------|
+| 1. 채용공고 등록    | /api/job-posting/register              | POST        |
+| 2. 채용공고 수정    | /api/job-posting/update/{jobPostingId} | PUT         |
+| 3. 채용공고 삭제    | /api/job-posting/delete/{jobPostingId} | DELTE       |
+| 4. 채용공고 상세조회  | /api/job-posting/detail/{jobPostingId} | GET         |
+| 5. 채용공고 목록 조회 | /api/job-posting/?page=0&size=10       | GET         |
 
 
+---
 1. 채용공고 등록(/api/job-posting/register, POST)
 ```json
 // 요청
@@ -50,13 +52,21 @@
   "jobDescription":"원티드랩에서 백엔드 주니어 개발자를 채용합니다. 자격요건은..",
   "skillsRequired":"Python"
 }
+// 더미데이터용 
+{
+  "companyId": 1,
+  "positionTitle":"초급 DBA",
+  "hiringBonus":1200000,
+  "jobDescription":"원티드랩에서 초급 DBA를 채용합니다. 자격요건은..",
+  "skillsRequired":"Oracle DB"
+}
 
 // 응답
 "채용 공고 등록이 완료되었습니다."
 ```
 
 
-2.채용공고 수정 (/api/job-posting/update/{jobPostingId})
+2. 채용공고 수정 (/api/job-posting/update/{jobPostingId})
 ```json
 // 요청 
 {
@@ -91,5 +101,37 @@
   "jobPostings": [
     1
   ]
+}
+```
+
+5. 채용 공고 목록 조회 (/api/job-posting/?page=0&size=10)
+```json
+// 응답
+{
+  "content": [
+    {
+      "jobPostId": 1,
+      "companyId": 1,
+      "country": "한국",
+      "region": "서울",
+      "positionTitle": "백엔드 주니어 개발자",
+      "hiringBonus": 1000000,
+      "skillsRequired": "Python"
+    },
+    {
+      "jobPostId": 2,
+      "companyId": 1,
+      "country": "한국",
+      "region": "서울",
+      "positionTitle": "초급 DBA",
+      "hiringBonus": 1200000,
+      "skillsRequired": "Oracle DB"
+    }
+  ],
+  "pageNumber": 0,
+  "pageSize": 10,
+  "totalElements": 2,
+  "totalPages": 1,
+  "last": true
 }
 ```
