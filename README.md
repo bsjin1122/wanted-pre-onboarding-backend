@@ -11,8 +11,8 @@
 - [x] 채용 공고를 등록합니다. 
 - [x] 채용 공고를 수정합니다.
 - [x] 채용 공고를 삭제합니다.
-- [ ] 채용 공고 목록을 가져옵니다.
-- [ ] 채용 공고 검색 기능 구현(선택사항 및 가산점 요소)
+- [x] 채용 공고 목록을 가져옵니다.
+- [x] 채용 공고 검색 기능 구현(선택사항 및 가산점 요소)
 - [x] 채용 상세 페이지를 가져옵니다.
 - [ ] 사용자는 채용공고에 지원합니다. (선택사항 및 가산점 요소)
 - [x] ORM 사용하여 구현
@@ -32,13 +32,14 @@
 ![img.png](img.png)
 
 ### API 명세
-| 기능            | api path                               | Http Method |
-|---------------|----------------------------------------|-------------|
-| 1. 채용공고 등록    | /api/job-posting/register              | POST        |
-| 2. 채용공고 수정    | /api/job-posting/update/{jobPostingId} | PUT         |
-| 3. 채용공고 삭제    | /api/job-posting/delete/{jobPostingId} | DELTE       |
-| 4. 채용공고 상세조회  | /api/job-posting/detail/{jobPostingId} | GET         |
-| 5. 채용공고 목록 조회 | /api/job-posting/?page=0&size=10       | GET         |
+| 기능           | api path                               | Http Method |
+|--------------|----------------------------------------|------------|
+| 1. 채용공고 등록   | /api/job-posting/register              | POST       |
+| 2. 채용공고 수정   | /api/job-posting/update/{jobPostingId} | PUT        |
+| 3. 채용공고 삭제   | /api/job-posting/delete/{jobPostingId} | DELTE      |
+| 4. 채용공고 상세조회 | /api/job-posting/detail/{jobPostingId} | GET        |
+| 5. 채용공고 목록 조회 | /api/job-posting/?page=0&size=10       | GET        |
+| 6.  채용공고 검색  |/api/job-posting/search?keyword=주니어&page=0&size=10| GET  |
 
 
 ---
@@ -131,6 +132,29 @@
   "pageNumber": 0,
   "pageSize": 10,
   "totalElements": 2,
+  "totalPages": 1,
+  "last": true
+}
+```
+
+6. 채용 공고 검색 (api/job-posting/search?keyword=주니어&page=0&size=10)
+```json
+// 응답
+{
+  "content": [
+    {
+      "jobPostId": 1,
+      "companyId": 1,
+      "country": "한국",
+      "region": "서울",
+      "positionTitle": "백엔드 주니어 개발자",
+      "hiringBonus": 1000000,
+      "skillsRequired": "Python"
+    }
+  ],
+  "pageNumber": 0,
+  "pageSize": 10,
+  "totalElements": 1,
   "totalPages": 1,
   "last": true
 }

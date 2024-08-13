@@ -118,4 +118,22 @@ public class JobPostingServiceImpl implements JobPostingService {
 				.build());
 		return new PagedResponseDTO<>(response);
 	}
+
+	@Override
+	public PagedResponseDTO<JobPostingsPagingDTO> searchJobPostings(String keyword, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Page<JobPosting> jobPostings = jobPostingRepository.findByKeywordInAllFields(keyword, pageable);
+
+		Page<JobPostingsPagingDTO> response = jobPostings.map(jobPosting ->
+			JobPostingsPagingDTO.builder()
+				.jobPostId(jobPosting.getId())
+				.companyId(jobPosting.getCompany().getId())
+				.country(jobPosting.getCompany().getCountry())
+				.region(jobPosting.getCompany().getRegion())
+				.positionTitle(jobPosting.getPositionTitle())
+				.hiringBonus(jobPosting.getHiringBonus())
+				.skillsRequired(jobPosting.getSkillsRequired())
+				.build());
+		return new PagedResponseDTO<>(response);
+	}
 }

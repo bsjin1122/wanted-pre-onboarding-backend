@@ -1,5 +1,6 @@
 package com.wanted.job.jobPosting.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +57,16 @@ public class JobPostingController {
 		@RequestParam(defaultValue = "10") int size
 	){
 		PagedResponseDTO<JobPostingsPagingDTO> response = jobPostingService.getAllJobPostings(page, size);
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<PagedResponseDTO<JobPostingsPagingDTO>> searchJobPostings(
+		@RequestParam String keyword,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size
+	){
+		PagedResponseDTO<JobPostingsPagingDTO> response = jobPostingService.searchJobPostings(keyword, page, size);
 		return ResponseEntity.ok(response);
 	}
 

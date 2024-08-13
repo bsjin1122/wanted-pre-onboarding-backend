@@ -17,4 +17,5 @@ public interface JobPostingService {
 	JobPostingResponseDTO detailJobPosting(Long jobPostingId);
 
 	PagedResponseDTO<JobPostingsPagingDTO> getAllJobPostings(int page, int size);
+	PagedResponseDTO<JobPostingsPagingDTO> searchJobPostings(String keyword, int page, int size);
 }
