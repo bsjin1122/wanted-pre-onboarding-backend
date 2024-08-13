@@ -22,11 +22,12 @@ public class ApplicationController {
 	private final ApplicationService applicationService;
 	@GetMapping("/apply")
 	public String showApplyForm() {
-		return "apply"; // 지원하기 화면을 나타내는 Thymeleaf 템플릿 파일 이름
+		return "apply";
 	}
 	@PostMapping("/apply")
-	public ResponseEntity<String> applyJobApplication(@RequestBody ApplicationRequestDTO request){
+	public String applyJobApplication(@RequestBody ApplicationRequestDTO request) {
 		applicationService.jobApplicate(request);
-		return ResponseEntity.ok("지원이 완료되었습니다.");
+		return "redirect:/api/job-posting/";
 	}
+
 }
