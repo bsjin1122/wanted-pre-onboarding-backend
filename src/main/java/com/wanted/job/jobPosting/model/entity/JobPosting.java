@@ -29,20 +29,26 @@ public class JobPosting extends BaseTimeEntity {
 	@Column(nullable = false)
 	private Long id;
 
-	@Column(nullable = false, length = 255)
+	@Column(nullable = false)
 	private String positionTitle;
 
 	@Column
 	private Integer hiringBonus;
 
-	@Column(nullable = false, length = 255)
+	@Column(nullable = false)
 	private String jobDescription;
 
-	@Column(nullable = false, length = 255)
+	@Column(nullable = false)
 	private String skillsRequired;
 
 	@ManyToOne
 	@JoinColumn(name = "company_id", nullable = false)
 	private Company company;
 
+	public void updateJobPost(String positionTitle, Integer hiringBonus, String jobDescription, String skillsRequired) {
+		this.positionTitle = positionTitle;
+		this.hiringBonus = hiringBonus;
+		this.jobDescription = jobDescription;
+		this.skillsRequired = skillsRequired;
+	}
 }

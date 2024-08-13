@@ -1,6 +1,7 @@
 package com.wanted.job.jobPosting.service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -8,11 +9,13 @@ import com.wanted.job.company.exception.CompanyErrorCode;
 import com.wanted.job.company.exception.CompanyException;
 import com.wanted.job.company.model.entity.Company;
 import com.wanted.job.company.repository.CompanyRepository;
+import com.wanted.job.jobPosting.exception.JobPostingErrorCode;
+import com.wanted.job.jobPosting.exception.JobPostingException;
 import com.wanted.job.jobPosting.model.dto.JobPostingRequestDTO;
+import com.wanted.job.jobPosting.model.dto.JobPostingResponseDTO;
 import com.wanted.job.jobPosting.model.entity.JobPosting;
 import com.wanted.job.jobPosting.repository.JobPostingRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,5 +48,51 @@ public class JobPostingServiceImpl implements JobPostingService {
 			throw new CompanyException(CompanyErrorCode.COMPANY_ID_NOT_FOUND);
 		}
 
+	}
+
+	@Override
+	public void deleteJobPosting(Long jobPostingId) {
+		JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
+			.orElseThrow(()-> new JobPostingException(JobPostingErrorCode.JOB_POSTING_NOT_FOUND));
+		jobPostingRepository.delete(jobPosting);
+	}
+
+	@Override
+	public void updateJobPosting(Long jobPostingId, JobPostingRequestDTO request) {
+		Optional<JobPosting> jobPosting = jobPostingRepository.findById(jobPostingId);
+		if(jobPosting.isEmpty()){
+			throw new JobPostingException(JobPostingErrorCode.JOB_POSTING_NOT_FOUND);
+		}
+
+		JobPosting existJobPosting = jobPosting.get();
+		existJobPosting.updateJobPost(
+			request.getPositionTitle(),
+			request.getHiringBonus(),
+			request.getJobDescription(),
+			request.getSkillsRequired()
+		);
+		jobPostingRepository.save(existJobPosting);
+	}
+
+	@Override
+	public JobPostingResponseDTO detailJobPosting(Long jobPostingId) {
+		JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
+			.orElseThrow(() -> new JobPostingException(JobPostingErrorCode.JOB_POSTING_NOT_FOUND));
+
+		JobPostingResponseDTO responseDTO = JobPostingResponseDTO.builder()
+			.jobPostId(jobPostingId)
+			.companyId(jobPosting.getCompany().getId())
+			.country(jobPosting.getCompany().getCountry())
+			.region(jobPosting.getCompany().getRegion())
+			.positionTitle(jobPosting.getPositionTitle())
+			.jobDescription(jobPosting.getJobDescription())
+			.hiringBonus(jobPosting.getHiringBonus())
+			.skillsRequired(jobPosting.getSkillsRequired())
+			.jobPostings(jobPosting.getCompany().getJobPostings().stream()
+				.map(JobPosting::getId)  // JobPosting 객체에서 ID만 추출
+				.collect(Collectors.toList())) // ID 리스트로 변환
+			.build();
+
+		return responseDTO;
 	}
 }

@@ -7,16 +7,16 @@
 - 회사는 채용 공고를 생성하고, 이에 사용자는 지원합니다.
 
 ## 요구사항
-- [ ] 필요한 모델: 회사, 사용자, 채용공고, 지원내역(선택사항)
-- [ ] 채용 공고를 등록합니다. 
+- [x] 필요한 모델: 회사, 사용자, 채용공고, 지원내역(선택사항)
+- [x] 채용 공고를 등록합니다. 
 - [ ] 채용 공고를 수정합니다.
 - [ ] 채용 공고를 삭제합니다.
 - [ ] 채용 공고 목록을 가져옵니다.
 - [ ] 채용 공고 검색 기능 구현(선택사항 및 가산점 요소)
 - [ ] 채용 상세 페이지를 가져옵니다.
 - [ ] 사용자는 채용공고에 지원합니다. (선택사항 및 가산점 요소)
-- [ ] ORM 사용하여 구현
-- [ ] RDBMS 사용 (SQLite, PostgreSQL, MySql 등)
+- [x] ORM 사용하여 구현
+- [x] RDBMS 사용 (SQLite, PostgreSQL, MySql 등)
 
 ---
 ### 커밋 메시지 포맷
@@ -32,11 +32,11 @@
 ![img.png](img.png)
 
 ### API 명세
-| 기능         | api path                  | Http Method |
-|------------|---------------------------|-------------|
-| 1. 채용공고 등록 | /api/job-posting/register | POST   |
-
-
+| 기능         | api path                               | Http Method |
+|------------|----------------------------------------|-------------|
+| 1. 채용공고 등록 | /api/job-posting/register              | POST        |
+| 2. 채용공고 수정 | /api/job-posting/update/{jobPostingId} | PUT         |
+| 3. 채용공고 삭제 | /api/job-posting/delete/{jobPostingId} | DELTE       
 
 1. 채용공고 등록(/api/job-posting/register, POST)
 ```json
@@ -51,4 +51,43 @@
 
 // 응답
 "채용 공고 등록이 완료되었습니다."
+```
+
+
+2.채용공고 수정 (/api/job-posting/update/{jobPostingId})
+```json
+// 요청 
+{
+  "positionTitle":"프론트 주니어 개발자",
+  "hiringBonus":2500000,
+  "jobDescription":"원티드랩에서 프론트 주니어 개발자를 채용합니다. 자격요건은..",
+  "skillsRequired":"JS"
+}
+
+// 응답
+"채용 공고 수정이 완료되었습니다."
+```
+
+3. 채용 공고 삭제 (/api/job-posting/delete/{jobPostingId})
+```json
+// 응답
+"채용 공고 삭제가 완료되었습니다."
+```
+
+4. 채용 공고 상세 조회 (/api/job-posting/detail/{jobPostingId})
+```json
+// 응답
+{
+  "jobPostId": 1,
+  "companyId": 1,
+  "country": "한국",
+  "region": "서울",
+  "positionTitle": "백엔드 주니어 개발자",
+  "hiringBonus": 1000000,
+  "jobDescription": "원티드랩에서 백엔드 주니어 개발자를 채용합니다. 자격요건은..",
+  "skillsRequired": "Python",
+  "jobPostings": [
+    1
+  ]
+}
 ```
