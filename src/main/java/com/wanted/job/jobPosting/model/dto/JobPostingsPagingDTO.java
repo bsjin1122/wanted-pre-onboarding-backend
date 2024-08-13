@@ -14,6 +14,7 @@ import lombok.Setter;
 public class JobPostingsPagingDTO {
 	private Long jobPostId;
 	private Long companyId;
+	private String companyName;
 	private String country;
 	private String region;
 

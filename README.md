@@ -43,6 +43,17 @@
 
 
 ---
+- 회사 / 사용자 등록
+```sql
+INSERT INTO company (company_name, country, region, created_at, updated_at) 
+VALUES ('원티드', '한국', '서울', NOW(), NOW());
+
+insert into wanted_user (username, email, created_at, updated_at) 
+VALUES ('bsj', 'abc@gmail.com', now(), now());
+
+SELECT * FROM company;
+SELECT * FROM job_posting;
+```
 1. 채용공고 등록(/api/job-posting/register, POST)
 ```json
 // 요청

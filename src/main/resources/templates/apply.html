@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>지원하기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            position: relative; /* 필요한 경우 추가 */
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .button-group {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .button.register {
+            background-color: #28a745;
+        }
+
+        .button.register:hover {
+            background-color: #218838;
+        }
+
+        .button.apply {
+            background-color: #007bff;
+        }
+
+        .button.apply:hover {
+            background-color: #0056b3;
+        }
+
+        /* 목록으로 돌아가기 링크를 우측 하단으로 위치시키기 */
+        .back-link {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>지원하기</h2>
+    <form th:action="@{/api/application/apply}" method="post">
+        <!-- 지원 폼 필드 추가 -->
+        <label>채용공고 ID: <input type="number" name="jobPostingId" required></label>
+        <label>지원자 이름: <input type="number" name="userId" required></label>
+        <label>이력서: <input type="text" name="resume" required></label>
+        <button type="submit">지원</button>
+    </form>
+    <div class="back-link">
+        <a href="/api/job-posting/">목록으로 돌아가기</a>
+    </div>
+</div>
+</body>
+</html>

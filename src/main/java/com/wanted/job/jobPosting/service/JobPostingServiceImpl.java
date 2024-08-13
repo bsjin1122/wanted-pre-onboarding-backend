@@ -38,7 +38,12 @@ public class JobPostingServiceImpl implements JobPostingService {
 		Optional<Company> companyOptional = companyRepository.findById(request.getCompanyId());
 
 		if (companyOptional.isPresent()) {
-			Company company = companyOptional.get();
+			Company company = Company.builder()
+				.country(request.getCountry())
+				.name(request.getCompanyName())
+				.region(request.getRegion()).build();
+
+			companyRepository.save(company);
 
 			JobPosting jobPosting = JobPosting.builder()
 				.positionTitle(request.getPositionTitle())
@@ -47,6 +52,7 @@ public class JobPostingServiceImpl implements JobPostingService {
 				.skillsRequired(request.getSkillsRequired())
 				.jobDescription(request.getJobDescription())
 				.build();
+
 
 			jobPostingRepository.save(jobPosting);
 		} else {
@@ -109,7 +115,7 @@ public class JobPostingServiceImpl implements JobPostingService {
 		Page<JobPostingsPagingDTO> response = jobPostings.map(jobPosting ->
 			JobPostingsPagingDTO.builder()
 				.jobPostId(jobPosting.getId())
-				.companyId(jobPosting.getCompany().getId())
+				.companyName(jobPosting.getCompany().getName())
 				.country(jobPosting.getCompany().getCountry())
 				.region(jobPosting.getCompany().getRegion())
 				.positionTitle(jobPosting.getPositionTitle())

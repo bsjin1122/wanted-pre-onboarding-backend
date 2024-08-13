@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>채용 공고</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            position: relative;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+            color: #555;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        tbody tr:hover {
+            background-color: #f0f8ff;
+        }
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .search-container input[type="text"] {
+            width: calc(100% - 120px);
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-container button:hover {
+            background-color: #0056b3;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            margin: 0 4px;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .pagination a.active {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+        .pagination a:hover {
+            background-color: #e9ecef;
+            border-color: #ccc;
+        }
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        .button-group .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .button-group .button.register {
+            background-color: #28a745;
+        }
+        .button-group .button.apply {
+            background-color: #007bff;
+        }
+        .button-group .button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>원티드 채용공고 및 지원 웹서비스</h2>
+
+    <!-- 버튼을 포함하는 컨테이너 추가 -->
+    <div class="button-group">
+        <a href="/api/job-posting/register" class="button register">채용공고 등록</a>
+        <a href="/api/application/apply" class="button apply">지원하기</a>
+    </div>
+
+    <!-- 검색 폼 추가 -->
+    <div class="search-container">
+        <form th:action="@{/api/job-posting/search}" method="get">
+            <input type="text" name="keyword" placeholder="검색어 입력" th:value="${keyword}">
+            <button type="submit">검색</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>채용공고 id</th>
+            <th>회사명</th>
+            <th>국가</th>
+            <th>지역</th>
+            <th>채용보상금</th>
+            <th>사용기술</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="job : ${jobPostings}" th:onclick="|window.location.href='/api/job-posting/detail/' + ${job.jobPostId}|">
+            <td th:text="${job.jobPostId}"></td>
+            <td th:text="${job.companyName}"></td>
+            <td th:text="${job.country}"></td>
+            <td th:text="${job.region}"></td>
+            <td th:text="${job.hiringBonus}"></td>
+            <td th:text="${job.skillsRequired}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이징 처리를 위한 내비게이션 -->
+    <div class="pagination">
+        <a th:href="@{/api/job-posting/search(keyword=${keyword}, page=${currentPage - 1}, size=${pageSize})}"
+           th:if="${currentPage > 0}">이전</a>
+
+        <span th:each="i, stat : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/api/job-posting/search(keyword=${keyword}, page=${i}, size=${pageSize})}"
+               th:text="${i + 1}"
+               th:classappend="${i == currentPage} ? 'active' : ''"></a>
+        </span>
+
+        <a th:href="@{/api/job-posting/search(keyword=${keyword}, page=${currentPage + 1}, size=${pageSize})}"
+           th:if="${currentPage < totalPages - 1}">다음</a>
+    </div>
+</div>
+</body>
+</html>

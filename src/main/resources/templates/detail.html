@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Posting Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        h2 {
+            color: #007bff;
+        }
+        .detail-item {
+            margin-bottom: 15px;
+        }
+        .detail-item strong {
+            width: 150px;
+            display: inline-block;
+        }
+        .job-posting-list {
+            margin-top: 20px;
+        }
+        .job-posting-list ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .job-posting-list li {
+            flex: 1 1 calc(33.333% - 10px);
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .job-posting-list a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .job-posting-list a:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+        .form-container {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .form-container input[type="text"],
+        .form-container textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        function toggleEditForm() {
+            var form = document.getElementById('edit-form');
+            form.classList.toggle('hidden');
+        }
+
+        function submitEditForm(event) {
+            event.preventDefault(); // 기본 폼 제출 동작 방지
+
+            var form = document.querySelector('#edit-form form');
+            var formData = new FormData(form);
+
+            // JSON으로 변환할 데이터 준비
+            var data = {
+                jobPostId: parseInt(formData.get('jobPostId'), 10),
+                companyId: parseInt(formData.get('companyId'), 10),
+                positionTitle: formData.get('positionTitle'),
+                hiringBonus: parseFloat(formData.get('hiringBonus')),
+                skillsRequired: formData.get('skillsRequired'),
+                jobDescription: formData.get('jobDescription')
+            };
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.redirected) {
+                        // 서버가 리다이렉트를 지시했을 경우
+                        window.location.href = response.url;
+                    } else {
+                        return response.json(); // JSON 응답으로 처리
+                    }
+                })
+                .then(data => {
+                    if (data) {
+                        console.log('응답 메시지:', data.message);
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('에러:', error);
+                    alert('서버 오류: ' + error.message);
+                });
+        }
+
+        function deleteJobPosting(jobPostingId) {
+            if (confirm('정말로 삭제하시겠습니까?')) {
+                fetch(`/api/job-posting/${jobPostingId}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => response.text())
+                    .then(message => {
+                        alert(message);
+                        window.location.href = '/api/job-posting/'; // 삭제 후 리다이렉트
+                    })
+                    .catch(error => {
+                        console.error('에러:', error);
+                        alert('서버 오류: ' + error.message);
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h2>채용공고 상세 정보</h2>
+
+    <div class="detail-item">
+        <strong>채용공고 ID:</strong> <span th:text="${jobPosting.jobPostId}" id="jobPostId"></span>
+    </div>
+    <div class="detail-item">
+        <strong>회사 ID:</strong> <span th:text="${jobPosting.companyId}" id="companyId"></span>
+    </div>
+    <div class="detail-item">
+        <strong>국가:</strong> <span th:text="${jobPosting.country}"></span>
+    </div>
+    <div class="detail-item">
+        <strong>지역:</strong> <span th:text="${jobPosting.region}"></span>
+    </div>
+    <div class="detail-item">
+        <strong>채용 포지션:</strong> <span th:text="${jobPosting.positionTitle}"></span>
+    </div>
+    <div class="detail-item">
+        <strong>채용보상금:</strong> <span th:text="${jobPosting.hiringBonus}"></span>
+    </div>
+    <div class="detail-item">
+        <strong>사용기술:</strong> <span th:text="${jobPosting.skillsRequired}"></span>
+    </div>
+    <div class="detail-item">
+        <strong>설명:</strong> <span th:text="${jobPosting.jobDescription}"></span>
+    </div>
+
+    <hr>
+
+    <div class="form-container hidden" id="edit-form">
+        <h3>채용공고 수정</h3>
+        <form onsubmit="submitEditForm(event)" th:action="@{/api/job-posting/update/{jobPostId}(jobPostId=${jobPosting.jobPostId})}" method="post">
+            <input type="hidden" name="jobPostId" th:value="${jobPosting.jobPostId}">
+            <input type="hidden" name="companyId" th:value="${jobPosting.companyId}">
+            <label>
+                채용 포지션:
+                <input type="text" name="positionTitle" th:value="${jobPosting.positionTitle}">
+            </label>
+            <label>
+                채용보상금:
+                <input type="text" name="hiringBonus" th:value="${jobPosting.hiringBonus}">
+            </label>
+            <label>
+                사용기술:
+                <input type="text" name="skillsRequired" th:value="${jobPosting.skillsRequired}">
+            </label>
+            <label>
+                설명:
+                <textarea name="jobDescription" rows="4" th:text="${jobPosting.jobDescription}"></textarea>
+            </label>
+            <button type="submit">수정 저장</button>
+            <button type="button" onclick="toggleEditForm()">취소</button>
+        </form>
+    </div>
+
+    <div>
+        <button onclick="toggleEditForm()">수정</button>
+        <button onclick="deleteJobPosting(document.getElementById('jobPostId').innerText)">삭제</button>
+    </div>
+
+    <div class="job-posting-list">
+        <h3>다른 채용공고</h3>
+        <ul>
+            <li th:each="postId : ${jobPosting.jobPostings}">
+                <a th:href="@{/api/job-posting/detail/{postId}(postId=${postId})}"
+                   th:text="'채용공고 ID: ' + ${postId}"></a>
+            </li>
+        </ul>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a th:href="@{/api/job-posting/}">목록으로 돌아가기</a>
+    </div>
+</div>
+</body>
+</html>

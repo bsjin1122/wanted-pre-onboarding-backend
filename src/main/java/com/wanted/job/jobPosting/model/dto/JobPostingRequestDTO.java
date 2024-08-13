@@ -13,7 +13,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class JobPostingRequestDTO {
 	private Long companyId;
-
+	private String companyName;
+	private String country;
+	private String region;
 	private Long jobPostId;
 	private String positionTitle;
 	private int hiringBonus;
