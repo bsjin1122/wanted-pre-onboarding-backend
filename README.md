@@ -9,11 +9,11 @@
 ## 요구사항
 - [x] 필요한 모델: 회사, 사용자, 채용공고, 지원내역(선택사항)
 - [x] 채용 공고를 등록합니다. 
-- [ ] 채용 공고를 수정합니다.
-- [ ] 채용 공고를 삭제합니다.
+- [x] 채용 공고를 수정합니다.
+- [x] 채용 공고를 삭제합니다.
 - [ ] 채용 공고 목록을 가져옵니다.
 - [ ] 채용 공고 검색 기능 구현(선택사항 및 가산점 요소)
-- [ ] 채용 상세 페이지를 가져옵니다.
+- [x] 채용 상세 페이지를 가져옵니다.
 - [ ] 사용자는 채용공고에 지원합니다. (선택사항 및 가산점 요소)
 - [x] ORM 사용하여 구현
 - [x] RDBMS 사용 (SQLite, PostgreSQL, MySql 등)
@@ -32,11 +32,13 @@
 ![img.png](img.png)
 
 ### API 명세
-| 기능         | api path                               | Http Method |
-|------------|----------------------------------------|-------------|
-| 1. 채용공고 등록 | /api/job-posting/register              | POST        |
-| 2. 채용공고 수정 | /api/job-posting/update/{jobPostingId} | PUT         |
-| 3. 채용공고 삭제 | /api/job-posting/delete/{jobPostingId} | DELTE       
+| 기능           | api path                               | Http Method |
+|--------------|----------------------------------------|-------------|
+| 1. 채용공고 등록   | /api/job-posting/register              | POST        |
+| 2. 채용공고 수정   | /api/job-posting/update/{jobPostingId} | PUT         |
+| 3. 채용공고 삭제   | /api/job-posting/delete/{jobPostingId} | DELTE       
+| 4. 채용공고 상세조회 | /api/job-posting/detail/{jobPostingId} | GET         |
+
 
 1. 채용공고 등록(/api/job-posting/register, POST)
 ```json
