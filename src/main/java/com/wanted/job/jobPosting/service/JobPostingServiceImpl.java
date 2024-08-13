@@ -134,6 +134,7 @@ public class JobPostingServiceImpl implements JobPostingService {
 			JobPostingsPagingDTO.builder()
 				.jobPostId(jobPosting.getId())
 				.companyId(jobPosting.getCompany().getId())
+				.companyName(jobPosting.getCompany().getName())
 				.country(jobPosting.getCompany().getCountry())
 				.region(jobPosting.getCompany().getRegion())
 				.positionTitle(jobPosting.getPositionTitle())
