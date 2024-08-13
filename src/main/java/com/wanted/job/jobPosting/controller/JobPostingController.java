@@ -48,7 +48,8 @@ public class JobPostingController {
 			jobPostingService.deleteJobPosting(jobPostingId);
 			return ResponseEntity.ok("채용 공고 삭제가 완료되었습니다.");
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패: " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.body("삭제 실패: " + e.getMessage());
 		}
 	}
 

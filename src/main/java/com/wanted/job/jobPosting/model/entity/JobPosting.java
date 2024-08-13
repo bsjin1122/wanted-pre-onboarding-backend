@@ -51,4 +51,14 @@ public class JobPosting extends BaseTimeEntity {
 		this.jobDescription = jobDescription;
 		this.skillsRequired = skillsRequired;
 	}
+
+	public void setCompany(Company company) {
+		if (this.company != null) {
+			this.company.getJobPostings().remove(this);
+		}
+		this.company = company;
+		if (company != null) {
+			company.getJobPostings().add(this);
+		}
+	}
 }

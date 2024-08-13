@@ -6,4 +6,5 @@ import com.wanted.job.application.model.entity.Application;
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
 	boolean existsByUser_UserIdAndJobPostingId(Long userId, Long jobPostingId);
+	void deleteByJobPostingId(Long jobPostingId);
 }

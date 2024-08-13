@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.wanted.job.application.repository.ApplicationRepository;
 import com.wanted.job.company.exception.CompanyErrorCode;
 import com.wanted.job.company.exception.CompanyException;
 import com.wanted.job.company.model.entity.Company;
@@ -31,6 +33,7 @@ public class JobPostingServiceImpl implements JobPostingService {
 
 	private final CompanyRepository companyRepository;
 	private final JobPostingRepository jobPostingRepository;
+	private final ApplicationRepository applicationRepository;
 
 
 	@Override
@@ -62,9 +65,22 @@ public class JobPostingServiceImpl implements JobPostingService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteJobPosting(Long jobPostingId) {
+		// 관련된 job_application 삭제
+		applicationRepository.deleteByJobPostingId(jobPostingId);
+
 		JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-			.orElseThrow(()-> new JobPostingException(JobPostingErrorCode.JOB_POSTING_NOT_FOUND));
+			.orElseThrow(() -> new JobPostingException(JobPostingErrorCode.JOB_POSTING_NOT_FOUND));
+
+		// 회사에서 JobPosting 제거
+		Company company = jobPosting.getCompany();
+		if (company != null) {
+			company.getJobPostings().remove(jobPosting);
+			companyRepository.save(company);
+		}
+
+		// JobPosting 삭제
 		jobPostingRepository.delete(jobPosting);
 	}
 
